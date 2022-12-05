@@ -1,13 +1,16 @@
 import React from "react";
 import { useState } from "react";
 import { useEffect } from "react";
+import Spinner from "../Spinner/Spinner";
 
 const Attendence = () => {
   const [attendence, setAttendence] = useState([]);
   const [date, setDate] = useState("");
   const [dates, setDates] = useState(null);
+  const [spinner, setSpinner] = useState(false);
 
   useEffect(() => {
+    setSpinner(true);
     fetch(" https://test.nexisltd.com/test", {
       headers: {
         authorization: `Bearer ${localStorage.getItem("ultimateAccesstoken")}`,
@@ -24,41 +27,17 @@ const Attendence = () => {
         }
         setDates(datesCollection);
         setDate(datesCollection[length - 1]);
+        setSpinner(false);
 
         //console.log(attendenceArray[0]);
       })
       .catch((err) => {
         console.log(err);
+        setSpinner(false);
       });
   }, []);
-  /*  console.log(attendence);
-  console.log(dates);
-  console.log(date); */
 
-  /* if (attendence) {
-    attendenceArray = Object.keys(attendence).map((e) => attendence[e]);
-
-    //console.log(attendenceArray[0]);
-  } */
-  const getDate = (dates) => {
-    //console.log(dates);
-    const length = Object.keys(dates).length;
-    const datesCollection = [];
-    for (let i = 0; i <= length - 1; i++) {
-      datesCollection.push(Object.keys(dates)[i]);
-    }
-    //console.log(datesCollection);
-    return datesCollection;
-  };
-  const getLastDate = (dates) => {
-    const length = Object.keys(dates).length;
-    const lastDate = Object.keys(dates)[length - 2];
-    //console.log(lastDate);
-    return lastDate;
-  };
   const getStatus = (dates, date) => {
-    const length = Object.keys(dates).length;
-    const lastDate = Object.keys(dates)[length - 2];
     const status = dates[date].status;
     //console.log(status);
     return status;
@@ -68,9 +47,12 @@ const Attendence = () => {
     setDate(e.target.opt.value);
     //console.log(e.target.opt.value);
   };
+  if (spinner) {
+    return <Spinner></Spinner>;
+  }
   return (
     <div>
-      <form onSubmit={handleSetDate}>
+      <form onSubmit={handleSetDate} className="text-center">
         {attendence.length > 0 && (
           <select
             name="opt"
@@ -87,8 +69,12 @@ const Attendence = () => {
         )}
         <input className="btn btn-primary" type="submit" value="Submit" />
       </form>
-      <h1>Attendence</h1>
-      <div className="overflow-x-auto w-full">
+      <div className="bg-primary my-14 w-4/5 md:w-3/5 lg:w-2/5 py-4 rounded-lg mx-auto">
+        <h1 className="text-white text-4xl font-bold text-center">
+          ATTENDANCE
+        </h1>
+      </div>
+      <div className="overflow-x-auto w-11/12 mx-auto">
         <table className="table w-full">
           <thead>
             <tr>

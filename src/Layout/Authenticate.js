@@ -5,13 +5,15 @@ import Navbar from "../Pages/Navbar/Navbar";
 
 const Authenticate = () => {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2">
-      <div>
-        <Navbar></Navbar>
-        <img src={image} alt="" />
-      </div>
-      <div>
-        <Outlet></Outlet>
+    <div>
+      <Navbar></Navbar>
+      <div className="grid grid-cols-1 md:grid-cols-2 w-4/5 md:w-4/5 lg:w-3/5 mx-auto gap-x-10">
+        <div className="flex items-center justify-center">
+          <img className="w-full" src={image} alt="" />
+        </div>
+        <div>
+          <Outlet></Outlet>
+        </div>
       </div>
     </div>
   );

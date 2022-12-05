@@ -1,3 +1,4 @@
+import ErrorPage from "../ErrorPage/ErrorPage";
 import Authenticate from "../Layout/Authenticate";
 import Attendence from "../Pages/Attendence/Attendence";
 import Login from "../Pages/Login/Login";
@@ -10,6 +11,7 @@ const routes = createBrowserRouter([
   {
     path: "/",
     element: <Main></Main>,
+    errorElement: <ErrorPage></ErrorPage>,
     children: [
       {
         path: "/",
@@ -20,6 +22,7 @@ const routes = createBrowserRouter([
   {
     path: "/register",
     element: <Authenticate></Authenticate>,
+    errorElement: <ErrorPage></ErrorPage>,
     children: [
       {
         path: "/register/signup",

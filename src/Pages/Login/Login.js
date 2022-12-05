@@ -1,15 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
+import { Link, useNavigate } from "react-router-dom";
+import Spinner from "../Spinner/Spinner";
 
 const Login = () => {
+  const navigate = useNavigate();
+  const [error, setError] = useState("");
+  const [spinner, setSpinner] = useState(false);
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
   const handleLogin = (data) => {
-    console.log(data);
+    setSpinner(true);
+    //console.log(data);
+    setError("");
     fetch("https://test.nexisltd.com/login", {
       method: "POST",
       headers: {
@@ -22,17 +29,28 @@ const Login = () => {
     })
       .then((res) => res.json())
       .then((result) => {
-        console.log(result);
-        localStorage.setItem("ultimateAccesstoken", result.access_token);
-        localStorage.setItem("ultimateRefressToken", result.refresh_token);
+        //console.log(result);
+        if (result.access_token) {
+          toast.success("Login Sucessfully");
+          localStorage.setItem("ultimateAccesstoken", result.access_token);
+          localStorage.setItem("ultimateRefressToken", result.refresh_token);
+          setSpinner(false);
+          navigate("/");
+        } else {
+          setSpinner(false);
+          setError(result.error);
+        }
       })
       .catch((err) => {
-        console.log(err);
+        //console.log(err);
       });
   };
   return (
     <div>
-      <h1 className="text-2xl text-center my-6">Login</h1>
+      {spinner && <Spinner></Spinner>}
+      <h1 className="text-4xl text-center my-6 font-bold text-primary">
+        Please Login
+      </h1>
 
       <div>
         <form onSubmit={handleSubmit(handleLogin)} className="flex flex-col ">
@@ -70,6 +88,7 @@ const Login = () => {
               <span className="text-red-600">{errors.password.message}</span>
             )}
           </div>
+          {error && <p className="text-red-500">{error}</p>}
           <input
             className="btn btn-primary my-3"
             type="submit"

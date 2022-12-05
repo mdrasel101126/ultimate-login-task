@@ -9,9 +9,6 @@ const Navbar = () => {
         {" "}
         <img className="" src={logo} alt="" />
       </Link>
-      <Link to="/register">Authenticate</Link>
-      <Link to="/register/login">Login</Link>
-      <Link to="/register/signup">SignUp</Link>
     </div>
   );
 };

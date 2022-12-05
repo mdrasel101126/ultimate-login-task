@@ -1,15 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import Spinner from "../Spinner/Spinner";
 
 const SignUp = () => {
+  const [error, setError] = useState("");
+  const [spinner, setSpinner] = useState(false);
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
   const handleSignUp = (data) => {
-    console.log(data);
+    //console.log(data);
+    setSpinner(true);
+    setError("");
     fetch("https://test.nexisltd.com/signup", {
       method: "POST",
       headers: {
@@ -25,7 +31,14 @@ const SignUp = () => {
     })
       .then((res) => res.json())
       .then((result) => {
-        console.log(result);
+        setSpinner(false);
+        //console.log(result);
+        if (result.sucess) {
+          setError("");
+          navigate("/register/login");
+        } else {
+          setError(result.error);
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -33,7 +46,10 @@ const SignUp = () => {
   };
   return (
     <div>
-      <h1 className="text-2xl text-center my-6">SignUp</h1>
+      {spinner && <Spinner></Spinner>}
+      <h1 className="text-4xl text-center my-6 font-bold text-primary">
+        SignUp
+      </h1>
 
       <div>
         <form onSubmit={handleSubmit(handleSignUp)} className="flex flex-col ">
@@ -116,6 +132,7 @@ const SignUp = () => {
               <span className="text-red-600">{errors.password.message}</span>
             )}
           </div>
+          {error && <p className="text-red-500">{error}</p>}
           <input
             className="btn btn-primary my-3"
             type="submit"
